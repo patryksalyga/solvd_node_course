@@ -40,21 +40,27 @@ export function convertToNumber(value) {
 export function coerceToType(value, type) {
     switch (type) {
         case 'string':
-            return String(value);
+            return stringifyValue(value);
         case 'number':
             return convertToNumber(value);
         case 'boolean':
+            let boolResult;
             if (typeof value === 'string') {
-                return value.toLowerCase() === 'true';
+                boolResult = value.toLowerCase() === 'true';
+            } else if (typeof value === 'number') {
+                boolResult = value !== 0;
+            } else if (typeof value === 'boolean') {
+                boolResult = value;
+            } else {
+                throw new Error('Value cannot be coerced to boolean');
             }
-            if (typeof value === 'number') {
-                return value !== 0;
-            }
-            throw new Error('Value cannot be coerced to boolean');
+
+            return invertBoolean(invertBoolean(boolResult));
         default:
             throw new Error(`Unsupported type: ${type}`);
     }
 }
+
 
 export function deepClone(value, weakMap = new WeakMap()) {
     if (value === null || typeof value !== 'object') {
@@ -74,7 +80,7 @@ export function deepClone(value, weakMap = new WeakMap()) {
     }
 
     if (weakMap.has(value)) {
-        return weakMap.get(value); 
+        return weakMap.get(value);
     }
 
     const result = Array.isArray(value) ? [] : {};
