@@ -1,4 +1,4 @@
-const { pipe } = require('ramda');
+const compose = (...fns) => (initialValue) => fns.reduceRight((acc, fn) => fn(acc), initialValue);
 //1.1
 function calculateDiscountedPrice(products, discountRate) {
     if (!Array.isArray(products)) {
@@ -73,10 +73,10 @@ const splitWords = (str) => str.toLowerCase().split(/\s+/);
 const unique = (arr) => Array.from(new Set(arr));
 const sort = (arr) => [...arr].sort(); 
 
-const filterUniqueWords = pipe(
-    splitWords,
+const filterUniqueWords = compose(
+    sort,
     unique,
-    sort
+    splitWords
   );
 //2.3
 const getAllGrades = (students) => students.flatMap(student => student.grades);
@@ -86,9 +86,9 @@ const calculateAverage = (numbers) => {
     return sum / numbers.length;
 };
 
-const getAverageGradePointFree = pipe(
-    getAllGrades,
-    calculateAverage
+const getAverageGradePointFree = compose(
+    calculateAverage,
+    getAllGrades
 );
 ////////////////////////////////////////////////////////////
 //3.1
