@@ -52,7 +52,7 @@ const product = {
 };
 
 Object.defineProperties(product, {
-    price: { enumerable: false, writable: false, configurable: true }, 
+    price: { enumerable: false, writable: false, configurable: false }, 
     quantity: { enumerable: false, writable: false, configurable: false } 
 });
 
